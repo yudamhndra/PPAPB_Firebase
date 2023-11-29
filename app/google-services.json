@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "162176173816",
-    "project_id": "learnfirebase-566e1",
-    "storage_bucket": "learnfirebase-566e1.appspot.com"
+    "project_number": "983642395608",
+    "project_id": "firestore-da770",
+    "storage_bucket": "firestore-da770.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:162176173816:android:0edf932a7ea723ce8bdd0d",
+        "mobilesdk_app_id": "1:983642395608:android:4437f9e0bd84a2bba898ad",
         "android_client_info": {
           "package_name": "com.example.firebase_pertemuan13"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDHHKTqVyrlpVS7RlNM3ctnO4zgocmFabs"
+          "current_key": "AIzaSyDLlWkilWvWt-c1go0mchSkDGFCf7yYamg"
         }
       ],
       "services": {

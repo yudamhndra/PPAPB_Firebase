@@ -8,7 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 
 class DetailsActivity : AppCompatActivity() {
 
@@ -18,6 +18,7 @@ class DetailsActivity : AppCompatActivity() {
     private lateinit var tvEmpSalary: TextView
     private lateinit var btnUpdate: Button
     private lateinit var btnDelete: Button
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,9 +91,23 @@ class DetailsActivity : AppCompatActivity() {
         age: String,
         salary: String
     ) {
-        val dbRef = FirebaseDatabase.getInstance().getReference("Employees").child(id)
-        val empInfo = Model(id, name, age, salary)
-        dbRef.setValue(empInfo)
+        db = FirebaseFirestore.getInstance()
+        val employeesCollection = db.collection("employees")
+
+        employeesCollection.document(id)
+            .update(
+                mapOf(
+                    "empName" to name,
+                    "empAge" to age,
+                    "empSalary" to salary
+                )
+            )
+            .addOnSuccessListener {
+                Toast.makeText(applicationContext, "Employee Data Updated", Toast.LENGTH_LONG).show()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(applicationContext, "Error updating document: $e", Toast.LENGTH_LONG).show()
+            }
     }
 
     private fun initView() {
@@ -115,17 +130,20 @@ class DetailsActivity : AppCompatActivity() {
     private fun deleteRecord(
         id: String
     ){
-        val dbRef = FirebaseDatabase.getInstance().getReference("Employees").child(id)
-        val mTask = dbRef.removeValue()
+        db = FirebaseFirestore.getInstance()
+        val employeesCollection = db.collection("employees")
 
-        mTask.addOnSuccessListener {
-            Toast.makeText(this, "Employee data deleted", Toast.LENGTH_LONG).show()
+        employeesCollection.document(id)
+            .delete()
+            .addOnSuccessListener {
+                Toast.makeText(this, "Employee data deleted", Toast.LENGTH_LONG).show()
 
-            val intent = Intent(this, FetchingActivity::class.java)
-            finish()
-            startActivity(intent)
-        }.addOnFailureListener{ error ->
-            Toast.makeText(this, "Deleting Err ${error.message}", Toast.LENGTH_LONG).show()
-        }
+                val intent = Intent(this, FetchingActivity::class.java)
+                finish()
+                startActivity(intent)
+            }
+            .addOnFailureListener{ error ->
+                Toast.makeText(this, "Deleting Err ${error.message}", Toast.LENGTH_LONG).show()
+            }
     }
 }
